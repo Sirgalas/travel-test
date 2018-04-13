@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `transaction`.
+ * Handles the creation of table `payer`.
  */
-class m180413_174616_create_transaction_table extends Migration
+class m180413_174648_create_transaction_table extends Migration
 {
     /**
      * {@inheritdoc}

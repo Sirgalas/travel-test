@@ -13,6 +13,7 @@ use Yii;
  * @property int $created_at
  *
  * @property Balance $balance
+ * @property Payer $payer
  */
 class Transaction extends \yii\db\ActiveRecord
 {
@@ -32,6 +33,7 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             [['balance_id', 'payer_id', 'created_at'], 'integer'],
             [['balance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Balance::className(), 'targetAttribute' => ['balance_id' => 'id']],
+            [['payer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payer::className(), 'targetAttribute' => ['payer_id' => 'id']],
         ];
     }
 
@@ -54,5 +56,13 @@ class Transaction extends \yii\db\ActiveRecord
     public function getBalance()
     {
         return $this->hasOne(Balance::className(), ['id' => 'balance_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayer()
+    {
+        return $this->hasOne(Payer::className(), ['id' => 'payer_id']);
     }
 }
