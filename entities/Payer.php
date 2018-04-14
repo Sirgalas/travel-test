@@ -53,6 +53,6 @@ class Payer extends \yii\db\ActiveRecord
      */
     public function getTransactions()
     {
-        return $this->hasMany(Transaction::className(), ['payer_id' => 'id']);
+        return $this->hasMany(Transaction::class, ['payer_id' => 'id']);
     }
 }

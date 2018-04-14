@@ -2,13 +2,14 @@
 
 namespace app\controllers;
 
+use SebastianBergmann\Timer\RuntimeException;
 use Yii;
 use app\entities\User;
 use app\search\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\services\LoginForm;
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -62,18 +63,56 @@ class UserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionRegister()
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            try{
+                if(!$model->save())
+                    throw new \RuntimeException('User not save');
+                $loginForm= new LoginForm();
+                $loginForm->login=$model->login;
+                if(!$loginForm->login())
+                    throw new \RuntimeException('User not logined');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }catch (\RuntimeException $e){
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+
         }
 
-        return $this->render('create', [
+        return $this->render('register', [
             'model' => $model,
         ]);
     }
+
+    public function actionLogin()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        }
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Logout action.
+     *
+     * @return Response
+     */
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+    
 
     /**
      * Updates an existing User model.

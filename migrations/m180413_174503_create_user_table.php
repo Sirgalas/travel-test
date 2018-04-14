@@ -15,8 +15,8 @@ class m180413_174503_create_user_table extends Migration
         $this->createTable('user', [
             'id' => $this->primaryKey(),
             'login'=>$this->string(510),
-            'created_at'=>$this->integer(),
-            'updated_at'=>$this->integer(),
+            'created_at'=>$this->timestamp(),
+            'updated_at'=>$this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
         ]);
         $this->createIndex(
             'idx-user_login',

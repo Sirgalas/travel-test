@@ -32,7 +32,7 @@ class Balance extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'integer'],
             [['sum'], 'number'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class Balance extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
@@ -61,6 +61,6 @@ class Balance extends \yii\db\ActiveRecord
      */
     public function getTransactions()
     {
-        return $this->hasMany(Transaction::className(), ['balance_id' => 'id']);
+        return $this->hasMany(Transaction::class, ['balance_id' => 'id']);
     }
 }

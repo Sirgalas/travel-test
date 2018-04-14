@@ -32,8 +32,8 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             [['balance_id', 'payer_id', 'created_at'], 'integer'],
-            [['balance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Balance::className(), 'targetAttribute' => ['balance_id' => 'id']],
-            [['payer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payer::className(), 'targetAttribute' => ['payer_id' => 'id']],
+            [['balance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Balance::class, 'targetAttribute' => ['balance_id' => 'id']],
+            [['payer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payer::class, 'targetAttribute' => ['payer_id' => 'id']],
         ];
     }
 

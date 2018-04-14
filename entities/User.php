@@ -3,6 +3,10 @@
 namespace app\entities;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\web\IdentityInterface;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user".
@@ -12,10 +16,12 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Balance[] $balances
+ * @property Balance[] $balance
  */
-class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
+    use \app\traits\Validate;
+
     /**
      * @inheritdoc
      */
@@ -24,15 +30,40 @@ class User extends \yii\db\ActiveRecord
         return 'user';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
+            [['login'], 'required'],
+            [['login'], 'unique'],
             [['created_at', 'updated_at'], 'integer'],
             [['login'], 'string', 'max' => 510],
         ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $balance = new Balance([
+            "user_id" => $this->id,
+            "sum" => 0.00
+        ]);
+        $balance->save();
+
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /**
@@ -48,11 +79,26 @@ class User extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBalances()
+    public function getBalance()
     {
-        return $this->hasMany(Balance::className(), ['user_id' => 'id']);
+        return $this->hasOne(Balance::class, ['user_id' => 'id']);
+    }
+
+    public static function findUserbyLogin($login)
+    {
+        return static::findOne(['login' => $login]);
     }
 }

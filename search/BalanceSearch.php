@@ -18,7 +18,7 @@ class BalanceSearch extends Balance
     public function rules()
     {
         return [
-            [['id', 'user_id'], 'integer'],
+            [['id'], 'integer'],
             [['sum'], 'number'],
         ];
     }
@@ -60,7 +60,7 @@ class BalanceSearch extends Balance
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'user_id' => Yii::$app->user->id,
             'sum' => $this->sum,
         ]);
 

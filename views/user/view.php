@@ -30,8 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'login',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
+            [
+                'attribule'=>'balance',
+                'label'=>'Balance',
+                'value'=>function()use ($model){
+                    return $model->balance->sum;
+                }
+            ]
         ],
     ]) ?>
 
