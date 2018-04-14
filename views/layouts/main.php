@@ -42,9 +42,9 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/user']],
 
-            ['label' => 'Balance', 'url' => ['/balance']],
+            !Yii::$app->user->isGuest ? ['label' => 'Balance', 'url' => ['/balance']]:"",
             ['label' => 'Payer', 'url' => ['/payer']],
-            ['label' => 'Transaction', 'url' => ['/transaction']],
+            !Yii::$app->user->isGuest ? ['label' => 'Transaction', 'url' => ['/transaction']]:"",
             Yii::$app->user->isGuest ? (
             ['label' => 'Login', 'url' => ['/user/login']]
             ) : (

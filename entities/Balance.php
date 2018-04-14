@@ -10,12 +10,15 @@ use Yii;
  * @property int $id
  * @property int $user_id
  * @property double $sum
- *
+ * @property integer $recipient_id
  * @property User $user
+ * @property integer $recipient_sum
  * @property Transaction[] $transactions
  */
 class Balance extends \yii\db\ActiveRecord
 {
+    public $recipient_id;
+    public $recipient_sum;
     /**
      * @inheritdoc
      */
@@ -30,7 +33,7 @@ class Balance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
+            [['user_id','recipient_id'], 'integer'],
             [['sum'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -46,6 +49,21 @@ class Balance extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'sum' => 'Sum',
         ];
+    }
+
+
+    public function balanceToUser($recipient_id,$sum){
+        $this->sum = $this->sum - $sum;
+        
+        if(($this->sum)<-1000)
+            throw new \Exception('Your balance is less than the allowable minimum');
+        $user=User::findOne($recipient_id);
+        $user->balance->sum=$user->balance->sum+$sum;
+        if(!$user->balance->save())
+            throw new \Exception('Sum not transferred');
+
+        if(!$this->update())
+            throw new \Exception('balance not save');
     }
 
     /**

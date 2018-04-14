@@ -2,43 +2,25 @@
 
 namespace tests\models;
 
-use app\models\User;
+use app\entities\User;
 
 class UserTest extends \Codeception\Test\Unit
 {
     public function testFindUserById()
     {
         expect_that($user = User::findIdentity(100));
-        expect($user->username)->equals('admin');
+        expect($user->username)->equals('Sergalas');
 
         expect_not(User::findIdentity(999));
     }
 
-    public function testFindUserByAccessToken()
-    {
-        expect_that($user = User::findIdentityByAccessToken('100-token'));
-        expect($user->username)->equals('admin');
+    
 
-        expect_not(User::findIdentityByAccessToken('non-existing'));        
+    public function testFindUserbyLogin()
+    {
+        expect_that($user = User::findUserbyLogin('Sergalas'));
+        expect_not(User::findUserbyLogin('not-admin'));
     }
 
-    public function testFindUserByUsername()
-    {
-        expect_that($user = User::findByUsername('admin'));
-        expect_not(User::findByUsername('not-admin'));
-    }
-
-    /**
-     * @depends testFindUserByUsername
-     */
-    public function testValidateUser($user)
-    {
-        $user = User::findByUsername('admin');
-        expect_that($user->validateAuthKey('test100key'));
-        expect_not($user->validateAuthKey('test102key'));
-
-        expect_that($user->validatePassword('admin'));
-        expect_not($user->validatePassword('123456'));        
-    }
-
+  
 }

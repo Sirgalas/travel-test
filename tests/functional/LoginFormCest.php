@@ -4,13 +4,12 @@ class LoginFormCest
 {
     public function _before(\FunctionalTester $I)
     {
-        $I->amOnRoute('site/login');
+        $I->amOnRoute('user/login');
     }
 
     public function openLoginPage(\FunctionalTester $I)
     {
         $I->see('Login', 'h1');
-
     }
 
     // demonstrates `amLoggedInAs` method
@@ -24,7 +23,7 @@ class LoginFormCest
     // demonstrates `amLoggedInAs` method
     public function internalLoginByInstance(\FunctionalTester $I)
     {
-        $I->amLoggedInAs(\app\models\User::findByUsername('admin'));
+        $I->amLoggedInAs(\app\entities\User::findUserbyLogin('admin'));
         $I->amOnPage('/');
         $I->see('Logout (admin)');
     }

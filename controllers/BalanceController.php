@@ -2,18 +2,34 @@
 
 namespace app\controllers;
 
+use app\entities\Payer;
+use app\entities\Transaction;
+use app\forms\ToUserForm;
+use SebastianBergmann\Timer\RuntimeException;
 use Yii;
 use app\entities\Balance;
 use app\search\BalanceSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\entities\User;
+use app\services\BalanceService;
 /**
  * BalanceController implements the CRUD actions for Balance model.
  */
 class BalanceController extends Controller
 {
+
+    private $service;
+
+    public function __construct($id, $module, BalanceService $service, $config = [])
+    {
+        $this->service = $service;
+        parent::__construct($id, $module, $config);
+
+    }
+    
     /**
      * @inheritdoc
      */
@@ -56,44 +72,7 @@ class BalanceController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
-    /**
-     * Creates a new Balance model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Balance();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Balance model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
+    
 
     /**
      * Deletes an existing Balance model.
@@ -107,6 +86,47 @@ class BalanceController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    
+    public function actionTransactionAdd(){
+        $model=new Transaction();
+        $payer= ArrayHelper::map(Payer::find()->asArray()->all(),'id','payer_name');
+        $model->balance_id=Yii::$app->user->identity->balance->id;
+        if($model->load(Yii::$app->request->post())){
+            try{
+                if(!$model->save())
+                    throw new \RuntimeException('Transaction not valid');
+                return $this->redirect(Yii::$app->homeUrl);
+            }catch (\RuntimeException $e){
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+        }
+        return $this->render('add-transaction',[
+            'model'=>$model,
+            'payer'=>$payer
+        ]);
+    }
+
+    public function actionToUser($id){
+        $model = $this->findModel($id);
+        $form = new ToUserForm();
+        $users = ArrayHelper::map(User::find()->asArray()->all(),'id','login');
+        if($form->load(Yii::$app->request->post())){
+            $transaction = Yii::$app->db->beginTransaction();
+            try{
+                $this->service->toUser($form,$id);
+                $transaction->commit();
+                return $this->redirect(Yii::$app->homeUrl);
+            }catch (\Exception $e){
+                Yii::$app->session->setFlash('error', $e->getMessage());
+                $transaction->rollBack();
+            }
+        }
+        return $this->render('to-user',[
+            'users'=>$users,
+            'model'=>$model,
+            'toUserForm'=>$form
+        ]);
     }
 
     /**

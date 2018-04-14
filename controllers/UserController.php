@@ -9,7 +9,7 @@ use app\search\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\services\LoginForm;
+use app\forms\LoginForm;
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -66,7 +66,6 @@ class UserController extends Controller
     public function actionRegister()
     {
         $model = new User();
-
         if ($model->load(Yii::$app->request->post()) ) {
             try{
                 if(!$model->save())
@@ -79,7 +78,6 @@ class UserController extends Controller
             }catch (\RuntimeException $e){
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
-
         }
 
         return $this->render('register', [

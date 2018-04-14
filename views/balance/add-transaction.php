@@ -1,21 +1,21 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\entities\Balance */
+
+/* @var $model app\entities\Transaction
+ * @var $payer app\entities\Payer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="balance-form">
+<div class="payer-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'sum')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'sum')->textInput() ?>
-
+    <?= $form->field($model, 'payer_id')->dropDownList([$payer]) ?>
+    
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

@@ -34,7 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'sum',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template'=>'{transaction-add},{to-user},{view}',
+                'buttons' => [
+                    'transaction-add'=>function($url, $model){
+                        return Html::a('<span class="glyphicon glyphicon-usd"></span>','/balance/transaction-add');
+                    },
+                    'to-user'=>function($url, $model){
+                        return Html::a('<span class="glyphicon glyphicon-user"></span>',$url);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 </div>

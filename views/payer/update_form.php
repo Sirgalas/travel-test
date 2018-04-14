@@ -2,15 +2,17 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model app\entities\Balance */
+/**
+ * @var $model app\entities\Payer
+ */
 
-$this->title = 'Update Balance: {nameAttribute}';
-$this->params['breadcrumbs'][] = ['label' => 'Balances', 'url' => ['index']];
+$this->title = 'Update form'.$model->payer_name;
+$this->params['breadcrumbs'][] = ['label' => 'Payers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="balance-update">
+
+<div class="payer-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

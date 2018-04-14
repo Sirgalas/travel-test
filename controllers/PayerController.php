@@ -76,13 +76,27 @@ class PayerController extends Controller
     }
 
     /**
+     * Lists all Payer models.
+     * @return mixed
+     */
+    public function actionUpdate()
+    {
+        $searchModel = new PayerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('update', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    /**
      * Updates an existing Payer model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdateForm($id)
     {
         $model = $this->findModel($id);
 
@@ -90,7 +104,7 @@ class PayerController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('update_form', [
             'model' => $model,
         ]);
     }

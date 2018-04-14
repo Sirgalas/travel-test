@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->balance->sum;
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            
         ],
     ]); ?>
 </div>
