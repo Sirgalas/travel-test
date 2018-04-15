@@ -45,6 +45,7 @@ AppAsset::register($this);
             !Yii::$app->user->isGuest ? ['label' => 'Balance', 'url' => ['/balance']]:"",
             ['label' => 'Payer', 'url' => ['/payer']],
             !Yii::$app->user->isGuest ? ['label' => 'Transaction', 'url' => ['/transaction']]:"",
+            Yii::$app->user->isGuest?['label' => 'Register', 'url' => ['/user/register']]:"",
             Yii::$app->user->isGuest ? (
             ['label' => 'Login', 'url' => ['/user/login']]
             ) : (
