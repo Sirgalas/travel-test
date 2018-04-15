@@ -40,7 +40,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/user']],
+            ['label' => 'Home', 'url' => ['/']],
 
             !Yii::$app->user->isGuest ? ['label' => 'Balance', 'url' => ['/balance']]:"",
             ['label' => 'Payer', 'url' => ['/payer']],
