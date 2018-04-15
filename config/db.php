@@ -1,6 +1,5 @@
 <?php
-
-
+var_dump($_SERVER['SERVER_NAME']);
 if ($_SERVER['SERVER_NAME'] == "yiitest.herokuapp.com") {
     $host = 'ec2-54-247-81-88.eu-west-1.compute.amazonaws.com';
     $username = 'mowiefedjjfoju';
@@ -21,10 +20,7 @@ return [
     'password' => $password,
     'charset' => 'utf8',
     'enableSchemaCache' => true,
-    // Schema cache options (for production environment)
-    //'enableSchemaCache' => true,
-    //'schemaCacheDuration' => 60,
-    //'schemaCache' => 'cache',
+
 ];
 
 
