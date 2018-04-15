@@ -22,7 +22,6 @@ var_dump([
     'enableSchemaCache' => true,
 
 ]);
-/*
 return [
     'class' => 'yii\db\Connection',
     'dsn' => $nameHost.':host='.$host.' dbname='.$dbname,
@@ -30,7 +29,6 @@ return [
     'password' => $password,
     'charset' => 'utf8',
     'enableSchemaCache' => true,
-
 ];
 
 
