@@ -1,5 +1,6 @@
 <?php
 var_dump($_SERVER['SERVER_NAME']);
+exit;
 if ($_SERVER['SERVER_NAME'] == "yiitest.herokuapp.com") {
     $host = 'ec2-54-247-81-88.eu-west-1.compute.amazonaws.com';
     $username = 'mowiefedjjfoju';
