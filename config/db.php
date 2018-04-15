@@ -1,6 +1,5 @@
 <?php
-var_dump($_SERVER['SERVER_NAME']);
-exit;
+
 if ($_SERVER['SERVER_NAME'] == "yiitest.herokuapp.com") {
     $host = 'ec2-54-247-81-88.eu-west-1.compute.amazonaws.com';
     $username = 'mowiefedjjfoju';
@@ -14,6 +13,16 @@ if ($_SERVER['SERVER_NAME'] == "yiitest.herokuapp.com") {
     $dbname = 'test';
     $nameHost = 'mysql';
 }
+var_dump([
+    'class' => 'yii\db\Connection',
+    'dsn' => $nameHost.':host='.$host.' dbname='.$dbname,
+    'username' => $username,
+    'password' => $password,
+    'charset' => 'utf8',
+    'enableSchemaCache' => true,
+
+]);
+/*
 return [
     'class' => 'yii\db\Connection',
     'dsn' => $nameHost.':host='.$host.' dbname='.$dbname,
